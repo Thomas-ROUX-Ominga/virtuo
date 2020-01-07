@@ -160,3 +160,12 @@ const actors = [{
 console.log(cars);
 console.log(rentals);
 console.log(actors);
+
+// Step 1
+for each (r in rentals){
+  for each (c in cars){
+    if (r.carId == c.id){
+      r.price = (c.pricePerDay * (r.returnDate - r.pickupDate + 1) + r.distance * c.pricePerKm)
+    }
+  }
+}

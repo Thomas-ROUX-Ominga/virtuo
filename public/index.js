@@ -170,10 +170,35 @@ for (var r of rentals){
   for (var c of cars){
     if (r.carId == c.id){
       r.price = (c.pricePerDay * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1) + r.distance * c.pricePerKm);
+      console.log(r.price);
     }
   }
 }
 
-console.log(rentals);
-
 // Step 2
+
+for (var r of rentals){
+  for (var c of cars){
+    if (r.carId == c.id){
+      for (let i = 0; i < (Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1; i++){
+        if (i === 0){
+          r.price = (c.pricePerDay + r.distance * c.pricePerKm);
+        }
+        else if ((i >= 1)&&(i < 4)){
+          r.price += (c.pricePerDay)*0.9;
+        }
+        else if ((i >= 4)&&(i < 10)){
+          r.price += (c.pricePerDay)*0.7;
+        }
+        else {
+          r.price += (c.pricePerDay)*0.5;
+        }
+      }
+      console.log(r.price);
+    }
+  }
+}
+
+
+// Step 3
+

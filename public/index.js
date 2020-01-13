@@ -202,3 +202,31 @@ for (var r of rentals){
 
 // Step 3
 
+for (var a of actors){
+  for (var r of rentals){
+    if ((a.rentalId == r.id)&&(r.price != 0)){
+      for (var p of a.payment)
+      {
+        if(p.who === 'driver'){
+          p.amount = r.price;
+        }
+        else if(p.who === 'partner'){
+          p.amount = (r.price * 0.7);
+        }
+        else if(p.who === 'insurance'){
+          p.amount = (r.price * 0.15);
+        }
+        else if(p.who === 'treasury'){
+          p.amount = ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
+        }
+        else{
+          p.amount = (r.price * 0.15) - ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
+        }
+      }
+    }
+  }
+}
+console.log(actors);
+
+// Step 4
+

@@ -73,6 +73,7 @@ const rentals = [{
   'carId': '4afcc3a2-bbf4-44e8-b739-0179a6cd8b7d',
   'pickupDate': '2019-12-01',
   'returnDate': '2019-12-15',
+  'distance': 1000,
   'options': {
     'deductibleReduction': true
   },
@@ -157,15 +158,22 @@ const actors = [{
   }]
 }];
 
+/*
 console.log(cars);
 console.log(rentals);
 console.log(actors);
+*/
 
 // Step 1
-for each (r in rentals){
-  for each (c in cars){
+
+for (var r of rentals){
+  for (var c of cars){
     if (r.carId == c.id){
-      r.price = (c.pricePerDay * (r.returnDate - r.pickupDate + 1) + r.distance * c.pricePerKm)
+      r.price = (c.pricePerDay * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1) + r.distance * c.pricePerKm);
     }
   }
 }
+
+console.log(rentals);
+
+// Step 2

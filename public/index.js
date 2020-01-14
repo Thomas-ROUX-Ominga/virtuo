@@ -32,7 +32,7 @@ const rentals = [{
     'firstName': 'Roman',
     'lastName': 'Frayssinet'
   },
-  'carId': 'f944a3ff-591b-4d5b-9b67-c7e08cba9791',
+  'carId': 'a9c1b91b-5e3d-4cec-a3cb-ef7eebb4892e',
   'pickupDate': '2020-01-02',
   'returnDate': '2020-01-02',
   'distance': 100,
@@ -170,10 +170,10 @@ for (var r of rentals){
   for (var c of cars){
     if (r.carId == c.id){
       r.price = (c.pricePerDay * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1) + r.distance * c.pricePerKm);
-      console.log(r.price);
     }
   }
 }
+console.log(rentals);
 
 // Step 2
 
@@ -194,10 +194,10 @@ for (var r of rentals){
           r.price += (c.pricePerDay)*0.5;
         }
       }
-      console.log(r.price);
     }
   }
 }
+console.log(rentals);
 
 // Step 3
 
@@ -207,8 +207,8 @@ for (var r of rentals){
     r.commission.treasury = ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
     r.commission.virtuo = (r.price * 0.15) - ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
   }
-  console.log(r.commission);
 }
+console.log(rentals);
 
 // Step 4
 
@@ -216,7 +216,52 @@ for (var r of rentals){
   if((r.options.deductibleReduction === true)&&(r.price != 0)){
     r.price += 4 * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
   }
-  console.log(r.price);
 }
+console.log(rentals);
 
 // Step 5
+
+for (var a of actors){
+  for (var r of rentals){
+    if ((a.rentalId == r.id)&&(r.price != 0)){
+      for (var p of a.payment)
+      {
+        if(r.options.deductibleReduction === true){
+          if(p.who === 'driver'){ // Amount = Price
+            p.amount = r.price;
+          }
+          else if(p.who === 'partner'){ // Amount = (Price - Option)*0.7
+            p.amount = ((r.price  - (4 * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1))) * 0.7);
+          }
+          else if(p.who === 'insurance'){ // Amount = (Price - Option)*0.15
+            p.amount = ((r.price  - (4 * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1))) * 0.15);
+          }
+          else if(p.who === 'treasury'){ // Amount = 1*nbDay
+            p.amount = ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
+          }
+          else{ // Amount = (Price - Option)*0.15 - 1*nbDay + Option
+            p.amount = (((r.price - (4 * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1)))* 0.15) - ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1) + (4 * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1)));
+          }
+        }
+        else{
+          if(p.who === 'driver'){
+            p.amount = r.price;
+          }
+          else if(p.who === 'partner'){
+            p.amount = (r.price * 0.7);
+          }
+          else if(p.who === 'insurance'){
+            p.amount = (r.price * 0.15);
+          }
+          else if(p.who === 'treasury'){
+            p.amount = ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
+          }
+          else{
+            p.amount = (r.price * 0.15) - ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
+          }
+        }
+      }
+    }
+  }
+}
+console.log(actors);

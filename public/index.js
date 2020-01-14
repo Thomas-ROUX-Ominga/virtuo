@@ -199,7 +199,6 @@ for (var r of rentals){
   }
 }
 
-
 // Step 3
 
 for (var r of rentals){
@@ -208,9 +207,16 @@ for (var r of rentals){
     r.commission.treasury = ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
     r.commission.virtuo = (r.price * 0.15) - ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
   }
+  console.log(r.commission);
 }
-console.log(rentals);
 
 // Step 4
 
+for (var r of rentals){
+  if((r.options.deductibleReduction === true)&&(r.price != 0)){
+    r.price += 4 * ((Date.parse(r.returnDate) - Date.parse(r.pickupDate))/(1000*3600*24) + 1);
+  }
+  console.log(r.price);
+}
 
+// Step 5
